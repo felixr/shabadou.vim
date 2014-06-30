@@ -1,7 +1,8 @@
 shabadou.txt    A collection of quickrun-hook  a generic
 
 ==============================================================================
-Table of Contents                                       *shabadou-contents*
+Table of Contents                                    *shabadou-contents*
+                                                    
 
 Overview                           |shabadou-introduction|
 Usage                              |shabadou-usage|
@@ -10,16 +11,17 @@ List of available quickrun hooks   |shabadou-hook|
 Configuration Examples             |shabadou-examples|
 
 ==============================================================================
-Overview                                             *shabadou-introduction*
+Overview                                         *shabadou-introduction*
 
 *shabadou.vim* is a collection of |quickrun-hook|s for thinca's |quickrun| vim
 plugin.
 
-- vim-quickrun - github: https://github.com/thinca/vim-quickrun
+- vim-quickrun: https://github.com/thinca/vim-quickrun
 
 
 ==============================================================================
-Usage                                                       *shabadou-usage*
+Usage                 *shabadou-usage*                                  
+
 
 The shabadou hooks can be used the same way as the hooks that are available by
 default (|quickrun-module-hook|)
@@ -33,14 +35,14 @@ Hooks can be enabled for each |quickrun-hook-point|. The example enables
 |shabadou-hook/close_quickfix| for |quickrun-hook-point-exit|.
 
 ==============================================================================
-Interface                                            *shabadou-interface*
+Interface                                           *shabadou-interface*
 
 
 ------------------------------------------------------------------------------
-Function                                             *shabadou-functions*
 
-shabadou#get_anim_output({name})        *shabadou#get_anim_output()*
-    I will return a string {name} has been printed at the end.
+shabadou#get_anim_output({name})            *shabadou#get_anim_output()*
+    Will return a string {name} that has been printed at the end.
+TODO: 
     |:QuickRun| returns an empty string when the medium other than.
     And pass the name of the |shabadou-hook| to output the animation of less
     than or equal to {name}
@@ -51,14 +53,16 @@ shabadou#get_anim_output({name})        *shabadou#get_anim_output()*
     - |shabadou-hook/neco|
 
 
-                                *shabadou#make_quickrun_hook_anim()*
+                                    *shabadou#make_quickrun_hook_anim()*
 shabadou#make_quickrun_hook_anim({name}, {aa_list}, {wait})
-    Generates a |quickrun-module| named {name} that shows a text animation.
-    You.
-    The animate the {wait}, a list of strings to animation to {aalist}
-    I set the weight of the application rate.
-    The generated|quickrun-module| can be used with|quickrun#module#register()|
+    Generates a |quickrun-module| with
+        {name} name of the module 
+        {aa_list} list of strings that make up the animation 
+        {wait} time steps to wait before showing the next string of the animation
+
+    The generated |quickrun-module| can be used with |quickrun#module#register()|
     to make it available for quickrun.
+
     The function can be used to create custom animations.
 Example: >
     call quickrun#module#register(
@@ -68,7 +72,7 @@ Example: >
 
 
 ==============================================================================
-For hook / enable it                              *shabadou-enable-point*
+Enable hooks for hook points                   *shabadou-enable-point*
 
 Is defined in shabadou |quickrun-hook| some of the
 You can set the enable for each |quickrun-hook-point|.
@@ -83,11 +87,11 @@ In this way, any to or be able to enable the hook in |quickrun-hook-point|
 
 
 ==============================================================================
-hook/priority                                   *shabadou-priority-point*
+hook/priority                                  *shabadou-priority-point*
 
-Is defined in |shabadou| |quickrun-hook| some of the
-You can set the priority for each each |quickrun-hook-point|
-
+You can set the priority for |shabadou|'s |quickrun-hook|s at each
+|quickrun-hook-point|.  This way it is possible to change the execution order
+of hooks
 
 Example >
     " After you go to the tab page, and move the window
@@ -98,26 +102,24 @@ Example >
     \ -hook/back_window/priority_exit 1
 <
 
-In this way, you can handle the hook in any order.
-
-
 ==============================================================================
 List of available quickrun hooks                         *shabadou-hook*
+                                                        
 
-And are defined in advance enable 0 basically all, when using the
-use by, for example, to define the enable 1 or the like |g:quickrun_config|.
-
-
-- "close_quickfix"                          *shabadou-hook/close_quickfix*
-  closes the quickfix window.
-  I is compatible with |shabadou-enable-point|.
-  I is compatible with |shabadou-priority-point|.
+In order to enable any of the hooks you must set enable to 1 on the command
+line or in |g:quickrun_config|.
 
 
-- "close_buffer"                               *shabadou-hook/close_buffer*
-  closes the buffer |quickrun-module-outputter/buffer|.
-  | I is compatible with | shabadou-enable-point.
-  | I is compatible with | shabadou-priority-point.
+- "close_quickfix"                        *shabadou-hook/close_quickfix*
+  Closes the quickfix window.
+
+  Implements |shabadou-enable-point| and |shabadou-priority-point|.
+
+   
+- "close_buffer"                            *shabadou-hook/close_buffer*
+  Closes the buffer |quickrun-module-outputter/buffer|.
+
+  Implements |shabadou-enable-point| and |shabadou-priority-point|.
 
   Options~
   enable_empty_data      default: 0
@@ -125,55 +127,54 @@ use by, for example, to define the enable 1 or the like |g:quickrun_config|.
       For one, I close the window buffer at the timing of on_exit.
 
 
-- "quickfix_status_enable"         *shabadou-hook/quickfix_status_enable*
-    calls |:QuickfixStatusEnable|
-    | I is compatible with | shabadou-enable-point.
+- "quickfix_status_enable"        *shabadou-hook/quickfix_status_enable*
+    Calls |:QuickfixStatusEnable|.
+
+    Implements |shabadou-enable-point|.
 
 
 - "hier_update"                              *shabadou-hook/hier_update*
-    call |:HierUpdate|
-    | I is compatible with |shabadou-enable-point.|
-    | I is compatible with |shabadou-priority-point|
+    Calls |:HierUpdate|.
+    Implements |shabadou-enable-point| and |shabadou-priority-point|. 
 
 
-- "extend_config"                           *shabadou-hook/extend_config*
-    config settings that are specified in the (|quickrun-module.init()|) after the config has been built
-    I will add.
+- "extend_config"                          *shabadou-hook/extend_config*
+    Adds config settings that are specified in the (|quickrun-module.init()|) after the config has been built
 
   Options~
-  target                        default: ""
-    I specify the type as the base.
+  target                default: ""
+    Specifies the target file type. 
+
 Example >
     " Adding a set of quickrun_config.cpp / _: "g
     :QuickRun -hook/extend_config/target "cpp/_" -hook/extend_config/enable 1
 <
 
-  force                         default: 0
-    decide whether to overwrite the type that is specified in the config
-    target the original.
-    overwrite the case of 1.
+  force                  default: 0
+    Specifies whether to overwrite the type that is specified in the config
+    target of the original.  Will overwrite when set to 1.
 
 
-- "inu" (English: dog)           *shabadou-hook/inu*
+- "inu" (English: dog)                               *shabadou-hook/inu*
   Shows a running dog during the execution of quickrun.
   Will only work with |quickrun-module-runner/vimproc|.
   The animation speed depends on the runner/vimproc/updatetime setting.
 
   Options~
   wait                          default: 4
-    It is the weight of animation speed.
-    Please adjust by setting this animation speed.
+    Time steps to wait in between animation steps.
+    Adjust this setting to change animation speed.
 
   priority_output               default: 0
-    I set the priority of |quickrun-hook.priority|
+    See |quickrun-hook.priority|
 
   redraw                        default: 0
-    In the case of one, I will do 'redraw' to echo later.
+    Will do 'redraw' when set to 1. 
 
   echo                          default: 1
-    In the case of one, I will do the output in echo.
+    Will echo the output, when set to one.
 
-- "neco" (English: cat)                 *shabadou-hook/neco*
+- "neco" (English: cat)                             *shabadou-hook/neco*
   Shows a running cat during the execution of quickrun.
   
   Will only work with |quickrun-module-runner/vimproc|.
@@ -181,45 +182,44 @@ Example >
 
   Options~
   wait                          default: 1
-    It is the weight of animation speed.
-    Please adjust by setting this animation speed.
+    Time steps to wait in between animation steps.
+    Adjust this setting to change animation speed.
 
   priority_output               default: 0
-    set the priority of |quickrun-hook.priority|
+    See |quickrun-hook.priority|
 
   redraw                        default: 0
-    In the case of one, I will do 'redraw' to echo later.
+    Will do 'redraw' when set to 1. 
 
   echo                          default: 1
-    In the case of one, I will do the output in echo.
+    Will echo the output, when set to one.
 
-
-- "nuko" *shabadou-hook/nuko*
+- "nuko"                                            *shabadou-hook/nuko*
   overtake during the execution of the quickrun is run around (≡ ΦωΦ)
-  It does not work unless |quickrun-module-runner/vimproc|
+  Will only work with |quickrun-module-runner/vimproc|.
   Animation speed depends on the runner/vimproc/updatetime.
 
   Options~
   wait                          default: 4
-    It is the weight of animation speed.
-    Please adjust by setting this animation speed.
+    Time steps to wait in between animation steps.
+    Adjust this setting to change animation speed.
 
   priority_output               default: 0
-    I set the priority of |quickrun-hook.priority|
+    See |quickrun-hook.priority|
 
   redraw                        default: 0
-    In the case of one, I will do 'redraw' to echo later.
+    Will do 'redraw' when set to 1. 
 
   echo                          default: 1
-    In the case of one, I will do the output in echo.
+    Will echo the output, when set to one.
 
-
-- "echo"                                        *shabadou-hook/echo*
+- "echo"                                            *shabadou-hook/echo*
     I will do the command output to set |quickrun-hook-point|
 
   Options~
   output_{point}                default: ""
-    I will command outputs a string that was set at {point}.
+    Ouput a string at point {point}.
+
 Example >
     " echo Success when command is successfull
     " echo Failure when command fails 
@@ -229,17 +229,11 @@ Example >
     \ -hook/echo/output_failure Failure
 <
 
-  enable_output_exit            default: 0
-    If the value is 1, it is set to {point} output_ is output.
-    If it is set to {point} output_ of multiple, point it is called from a post-Yu
-    It is used in earlier.
-
-
-- "unite_quickfix"                      *shabadou-hook/unite_quickfix*
+- "unite_quickfix"                        *shabadou-hook/unite_quickfix*
     I will activate the unite-quickfix.
-    There is necessary to introduce unite-quickfix before.
+    Requires |unite-quickfix| to be installed.
 
-    unite-quickfix - github: https://github.com/osyo-manga/unite-quickfix
+    unite-quickfix: https://github.com/osyo-manga/unite-quickfix
 
     |Shabadou-enable-point| It supports, but some behavior has changed.
     I is compatible with |shabadou-priority-point|.
@@ -263,7 +257,7 @@ Example >
     It becomes the | of unite.vim to start | unite-options-buffer-name.
 
 
-- "close_unite_quickfix"                *shabadou-hook/close_unite_quickfix*
+- "close_unite_quickfix"            *shabadou-hook/close_unite_quickfix*
     I close the window of buffer unite-quickfix.
     I is compatible with |shabadou-enable-point|
     I is compatible with |shabadou-priority-point|
@@ -275,7 +269,7 @@ Example >
     Sure to constant.
 
 
-- "redraw_unite_quickfix"               *shabadou-hook/redraw_unite_quickfix*
+- "redraw_unite_quickfix"          *shabadou-hook/redraw_unite_quickfix*
     I will update the unite-quickfix.
     I is compatible with |shabadou-enable-point|
 
@@ -286,7 +280,7 @@ Example >
     Sure to constant.
 
 
-- "Hi_hi_hi_" *shabadou-hook/hi_hi_hi_*
+- "Hi_hi_hi_"                                  *shabadou-hook/hi_hi_hi_*
     "Hee! Hee! Hee!" Animation
     | It does not work unless | quickrun-module-runner/vimproc.
     Animation speed depends on the runner / vimproc / updatetime.
@@ -306,7 +300,7 @@ Example >
     In the case of one, I will do the output in echo.
 
 
-- "Shabadoubi_touch_henshin" *shabadou-hook/shabadoubi_touch_henshin*
+- "Shabadoubi_touch_henshin"    *shabadou-hook/shabadoubi_touch_henshin*
     "Shaba Do~ubi touch strange scene!" Animation
     It does not work unless |quickrun-module-runner/vimproc|
     Animation speed depends on the runner / vimproc / updatetime.
@@ -326,7 +320,7 @@ Example >
     In the case of one, I will do the output in echo.
 
 
- - "output_config"                      *shabadou-hook/output_config*
+ - "output_config"                         *shabadou-hook/output_config*
     I want to output the contents of the command config.
     | I is compatible with | shabadou-enable-point.
     Use enable_normalized 1 If you intend to output the final config.
@@ -340,7 +334,7 @@ Example >
     In the case of 1, waiting for input will occur.
 
 
-- "output_command"                    *shabadou-hook/output_command*
+- "output_command"                        *shabadou-hook/output_command*
     I output to command the contents of the command.
     | I is compatible with | shabadou-enable-point.
     Use enable_ready 1 If you intend to output the final command.
@@ -354,7 +348,7 @@ Example >
     In the case of 1, waiting for input will occur.
 
 
-- "copen"                                     *shabadou-hook/copen*
+- "copen"                                          *shabadou-hook/copen*
     I open the quickfix window.
     |Shabadou-enable-point| It supports, but some behavior has changed.
     | I is compatible with | shabadou-priority-point.
@@ -368,10 +362,11 @@ Example >
     window starts.
 
 
-                  *shabadou-hook/quickfix_replace_tempname_to_bufnr*
+                      *shabadou-hook/quickfix_replace_tempname_to_bufnr*
 - "quickfix_replace_tempname_to_bufnr" 
-    |quickrun.vim| If you are logged in the temporary files, the number of buffers in 'quickfix'
-    Rather than a temporary file, | it or is replaced with a buffer number where you started | quickrun.vim
+    |quickrun.vim| If you are logged in the temporary files, the number of
+    buffers in 'quickfix' Rather than a temporary file, | it or is replaced
+    with a buffer number where you started | quickrun.vim
     Be.
     compatible with |shabadou-enable-point|
     compatible with |shabadou-priority-point|
@@ -381,7 +376,7 @@ Example >
     It is the buffer number to replace the buffer number of 'quickfix'.
 
 
-- "back_buffer" *shabadou-hook/back_buffer*
+- "back_buffer"                              *shabadou-hook/back_buffer*
     | I will open a buffer that was activated | quickrun.vim.
     | I is compatible with | shabadou-enable-point.
     | I is compatible with | shabadou-priority-point.
@@ -391,7 +386,7 @@ Example >
     It is the buffer number to open.
 
 
-- "back_window" *shabadou-hook/back_window*
+- "back_window"                              *shabadou-hook/back_window*
     | Go to the window that you turn on your | quickrun.vim.
     | I is compatible with | shabadou-enable-point.
     | I is compatible with | shabadou-priority-point.
@@ -401,7 +396,7 @@ Example >
     It is the window number you want to move.
 
 
-- "back_tabpage" *shabadou-hook/back_tabpage*
+- "back_tabpage"                            *shabadou-hook/back_tabpage*
     | Go to the tab page you turn on your | quickrun.vim.
     | I is compatible with | shabadou-enable-point.
     | I is compatible with | shabadou-priority-point.
@@ -411,7 +406,7 @@ Example >
     This is the tab number you want to move.
 
 
- - "vim_vimlint" *shabadou-hook/vim_vimlint*
+ - "vim_vimlint"                             *shabadou-hook/vim_vimlint*
     Set the | to run as an external command vim-vimlint |quickrun-option-exec| Will.
     syngan/vim-vimlint - https://github.com/syngan/vim-vimlint
 
@@ -430,11 +425,11 @@ Example >
 
 
 ==============================================================================
-Configuration Example                                   *shabadou-examples*
+Configuration Example                                *shabadou-examples*
 
 
 ------------------------------------------------------------------------------
-Open the buffer, to open the quickfix If you fail if you have successfully run
+Close the quickfix window on success and the output buffer on failure.
 
 >
     :QuickRun -outputter
@@ -445,7 +440,7 @@ Open the buffer, to open the quickfix If you fail if you have successfully run
 
 
 ------------------------------------------------------------------------------
-return to the window to its original position after starting |quickrun.vim|
+Return to the original window position after starting |quickrun.vim|
 
 
 Example >
